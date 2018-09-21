@@ -1,7 +1,5 @@
 package lab1part1.gui;
 
-import java.awt.event.ActionListener;
-
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -10,6 +8,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
@@ -18,8 +17,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import jdk.nashorn.internal.runtime.regexp.joni.Regex;
-import lab1part1.gui.ConsumingTask;
 
 public class CmdGUI extends Application {
 
@@ -136,6 +133,10 @@ public class CmdGUI extends Application {
         loopOut.setEditable(false);
         loopOut.setPrefSize(500, 200);
         gridPane.add(loopOut, 1,7,2,1);
+        
+        // Enable scroll bar
+//        ScrollBar scrollBarv = (ScrollBar)loopOut.lookup(".scroll-bar:vertical");
+//        scrollBarv.setDisable(false);
     }
     
     // Creating the mouse event handler for buttons

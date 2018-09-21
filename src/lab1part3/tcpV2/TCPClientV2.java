@@ -1,4 +1,4 @@
-package lab1part3.tcp;
+package lab1part3.tcpV2;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,9 +16,10 @@ public class TCPClientV2 implements Runnable {
     protected String cmdText 	= null;
     protected String cmdType 	= null;
     
-    private TCPClientV2(String address, int serverPort, String cmdType, String cmdText, TextArea cmdOut) throws Exception {
+    public TCPClientV2(String address, int serverPort, 
+    		String cmdType, String cmdText, TextArea cmdOut) throws Exception {
         this.socket 	= new Socket(address, serverPort);
-        this.cmdText 	= cmdType;
+        this.cmdType 	= cmdType;
         this.cmdText 	= cmdText;
         this.cmdOut 	= cmdOut;
     }
@@ -26,24 +27,31 @@ public class TCPClientV2 implements Runnable {
     @Override
     public void run() {
     	try {
+    		
+    		System.out.println("Client run");
     		// Send command
         	PrintWriter outBytes = new PrintWriter(socket.getOutputStream(), true);
-        	outBytes.println(cmdType);
-            outBytes.println(this.cmdText);
+        	//outBytes.println(this.cmdType);
+//        	outBytes.flush();
+        	String out = this.cmdType + "#" + this.cmdText;
+            outBytes.println(out);
             outBytes.flush();
             
             // Get response
             String dataFeed 	= null;
             StringBuilder sb 	= new StringBuilder();
             
-            // read the bytes from the input stream of the socket line by line
+            // Read the bytes from the input stream of the socket line by line
             BufferedReader inBytes = new BufferedReader(new InputStreamReader(socket.getInputStream())); 
             while ( (dataFeed = inBytes.readLine()) != null ) {
-                sb.append(new String(dataFeed));
-                sb.append("\n");
+            	System.out.println("Received executed data - " + dataFeed);
+            	cmdOut.appendText(dataFeed + "\n");
+//            	sb.append(dataFeed);
+//                sb.append("\n");
             }
             
-            cmdOut.setText(sb.toString());
+            // Modify text in gui
+//            cmdOut.setText(sb.toString());
             return;
             
         } catch (IOException e) {

@@ -1,9 +1,6 @@
 package lab1part3.tcp;
 
-import java.awt.event.ActionListener;
 import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -20,10 +17,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import jdk.nashorn.internal.runtime.regexp.joni.Regex;
-import lab1part1.gui.CmdRunnable;
-import lab1part1.gui.ConsumingTask;
-import lab1part1.gui.LoopRunnable;
 
 public class CmdClientGUI extends Application {
 
@@ -35,13 +28,19 @@ public class CmdClientGUI extends Application {
     protected boolean      isStopped    = false;// thread state flag
     protected Thread       runningThread= null; // pointer to the running thread
     
-    // volatile keyword: if there are several threads, 
+    //.................Educational Info...................
+    // Volatile keyword: if there are several threads, 
     // they will write/read command variable directly 
     // to the main memory, no confusion of unsyncronization
-	public volatile String cmdText 		= null; // text of the command or number given to the loop
+    //.....................................................
+    public volatile String cmdText 		= null; // text of the command or number given to the loop
 	public volatile String cmdType		= null; // type of cmd: "cmd" or "loop"
 	
 	private GridPane createCommandsGUI() {
+		//...................................
+		// GridPane - create a window layout
+		//...................................
+		
         // Instantiate a new Grid Pane
         GridPane gridPane = new GridPane();
 
@@ -69,6 +68,10 @@ public class CmdClientGUI extends Application {
     
     @Override
     public void start(Stage primaryStage) throws Exception {
+    	//........................................
+		// Starts automatically to draw a gridpane
+		//........................................
+    	
         primaryStage.setTitle("Command Executor");
 
         // Create the commands submission pane
@@ -85,6 +88,10 @@ public class CmdClientGUI extends Application {
     }
     
     private void addUIControls(GridPane gridPane) {
+    	//............................................
+		// Adds buttons/textfields into the pane cells
+		//............................................
+    	
         // Add Header
         Label headerLabel = new Label("Command Executor");
         headerLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
@@ -154,64 +161,85 @@ public class CmdClientGUI extends Application {
         gridPane.add(loopOut, 1,7,2,1);
     }
     
-    // Creating the mouse event handler for buttons
     EventHandler<javafx.scene.input.MouseEvent> eventHandler = 
        new EventHandler<javafx.scene.input.MouseEvent>() { 
-       
+    	//............................................
+		// Handle mouse clicks: 
+    	// - identify button, 
+    	// - send http get request
+    	// - set response to a corresponding text area
+		//............................................
+    	
        @Override 
        public void handle(javafx.scene.input.MouseEvent e) { 
-    	   
+
+    	   // Read user input
     	   String serverPath	= urlField.getText();
     	   Object src 			= e.getSource();
     	   cmdText 				= cmdField.getText();
     	   
+    	   // Create empty request and empty response
     	   HttpRequest httpReq 	= new HttpRequest();
     	   String serverResponse= null;
     	   
     	   if (src == loopButton) {
+    		   //...................................
+    		   // Loop execution - Fibonacci numbers
+    		   //................................... 
+    		   
     		   cmdType = "loop";
     		   
     		   try {
+    			   // Check if input is a number
     			   int iterNumber = Integer.parseInt(cmdText);
-    			   // sendget:
-    			   // form url
-    			   // send request
-    			   // ..request handled by server..
-    			   // loopOut.setText(result) - on a server side
     			   
+    			   // Send request and get encoded response
+    			   // Request is properly formed in sendGet
     			   serverResponse = httpReq.sendGet( cmdType, serverPath, cmdText);
-    			   String decodedText = URLDecoder.decode(serverResponse, "UTF-8");
-    			   System.out.println("Encoded text - "+ serverResponse + " decoded status is - " + decodedText);
     			   
+    			   // Decode response (to print new lines, etc)
+    			   String decodedText = URLDecoder.decode(serverResponse, "UTF-8");
+
+    			   // Set server response in a loop text area
     			   loopOut.setText(decodedText);
     			   
     		   } catch (NumberFormatException ex) {
     			   loopOut.setText("Please, enter a valid number of Fibonacci numbers");
     		   } catch (Exception e1) {
-    			   System.out.println("Send request exception");
+    			   System.out.println("Loop request - unknown exception");
     			   e1.printStackTrace();
     		   } 
     	   } else {
+    		   //...................................
+    		   // Command execution
+    		   //................................... 
+    		   
     		   cmdType = "cmd";
-			   try {
+			   
+    		   try {
+				   
+				   // Replace && with ; to avoid en-/decoding mistakes 
 				   cmdText = cmdText.replaceAll("&&", ";");
+				   
+				   // Send request and get encoded response
+    			   // Request is properly formed in sendGet
 				   serverResponse = httpReq.sendGet( cmdType, serverPath, cmdText);
+				   
+				   // Decode response (to print new lines, etc) 
 				   String decodedText = URLDecoder.decode(serverResponse, "UTF-8");
-				   System.out.println("Encoded text - "+ serverResponse + " decoded status is - " + decodedText);
+				   
+				   // Set server response in a cmd text area
 				   cmdOut.setText(decodedText);
 			   } catch (Exception e1) {
-				   System.out.println("Send request exception");
+				   System.out.println("Cmd request - unknown exception");
 				   e1.printStackTrace();
 			   }
 		   }
-    	   
        }    
     };
         
     public static void main(String[] args) {
         Application.launch(args);
     }
-      
-
 }
 

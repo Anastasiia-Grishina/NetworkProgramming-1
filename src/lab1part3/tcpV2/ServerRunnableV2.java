@@ -1,6 +1,7 @@
-package lab1part3.tcp;
+package lab1part3.tcpV2;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -14,18 +15,13 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
+import lab1part3.tcp.ConsumingTask;
+
 public class ServerRunnableV2 implements Runnable{
 
-	// necessary http get response headers
-	// date, server, content-length, content-type
-	
-	
-	
     protected Socket clientSocket = null;
     protected String serverText   = null;
     private String OUTPUT 		  = null;
-    private String cmdType		  = null;
-    
 
     public ServerRunnableV2(Socket clientSocket, String serverText) {
         this.clientSocket = clientSocket;
@@ -36,12 +32,25 @@ public class ServerRunnableV2 implements Runnable{
         try {
         	// input is a get request - url
             InputStream input = clientSocket.getInputStream();
+            System.out.println("Server runnable");
+            
+            // Read the bytes from the input stream of the socket line by line
+            DataInputStream  inBytes 	= new DataInputStream(input);
+//            		(new InputStreamReader(input)); 
+            String cmdRecv = inBytes.readLine();
+//            String cmdText = inBytes.readLine();
+            String cmdType = cmdRecv.split("#")[0];
+            String cmdText = cmdRecv.split("#")[1];
+            
+            System.out.println("Cmd type: " + cmdType);
+            System.out.println("Cmd text: " + cmdText);
             
             if (cmdType.equals("loop")) {
             	try {
             		int iterNumber 	= Integer.parseInt(cmdText);
             		OUTPUT 			= new ConsumingTask(iterNumber).
             				FibonacciNumbers().toString();
+            		System.out.println("Output is - " + OUTPUT);
             	} catch (NumberFormatException ex) {
             		OUTPUT 			= "Please, enter a valid number of Fibonacci numbers";
             	}
@@ -51,10 +60,7 @@ public class ServerRunnableV2 implements Runnable{
             
             OutputStream output = clientSocket.getOutputStream();
             
-            output.write((OUTPUT_HEADER_START 
-            		+ OUTPUT.length() 
-            		+ OUTPUT_HEADER_END 
-            		+ OUTPUT).getBytes());
+            output.write(OUTPUT.getBytes());
             
             // this is the server response sent
             output.flush();
@@ -80,34 +86,6 @@ public class ServerRunnableV2 implements Runnable{
  		System.out.println("OS bash path is " + sh);
  		return sh;
  	}
-    
-    public String convert(InputStream inputStream, Charset charset) throws IOException {
-    	 
-    	StringBuilder stringBuilder = new StringBuilder();
-    	String line = null;
-    	
-    	try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, charset))) {	
-    		while ((line = bufferedReader.readLine()) != null) {
-    			stringBuilder.append(line);
-    		}
-    	}
-     
-    	return stringBuilder.toString();
-    }
-    
-    public String extractDecodeQuery (InputStream inputStream) throws MalformedURLException, IOException {
-    	URL urlObj = new URL(convert(inputStream, StandardCharsets.UTF_8));
-    	String query = urlObj.getQuery();
-    	String queryDecode = URLDecoder.decode(query, "UTF-8");
-    	
-    	System.out.println("\nDecoded query: " + queryDecode);
-    	
-    	return queryDecode;
-    }
-    
-    
-    
-    
     
     public String cmdExecute(String cmdText) {
     	// Create a command as an array of String elems

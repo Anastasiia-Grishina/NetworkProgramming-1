@@ -1,14 +1,17 @@
 package lab1part3.tcp;
 
 public class ConsumingTask {
-	// The class accepts a number of values to count in Fibonacci sequence
-	// And returns StringBuffer with the sequence
-	private int iterNumber;
+	//....................................................................
+	// A class to compute Fibonacci numbers
+	//....................................................................
+	
+	private int iterNumber;		// number of Fibonacci values to return
 	
 	public ConsumingTask( int inIterNumber) {
 		this.iterNumber = inIterNumber;	
 	}
-	
+
+	// Computes Fibonacci numbers and returns StringBuffer
 	public StringBuffer FibonacciNumbers () {
 			
 		long f1 = 0;
@@ -23,5 +26,4 @@ public class ConsumingTask {
 		}
 		return result;
 	}
-	
 }

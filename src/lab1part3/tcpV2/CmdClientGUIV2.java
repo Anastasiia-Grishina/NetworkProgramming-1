@@ -1,6 +1,4 @@
-package lab1part3.tcp;
-
-import java.awt.event.ActionListener;
+package lab1part3.tcpV2;
 
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -22,6 +20,7 @@ import jdk.nashorn.internal.runtime.regexp.joni.Regex;
 import lab1part1.gui.CmdRunnable;
 import lab1part1.gui.ConsumingTask;
 import lab1part1.gui.LoopRunnable;
+
 
 public class CmdClientGUIV2 extends Application {
 
@@ -98,7 +97,7 @@ public class CmdClientGUIV2 extends Application {
         urlField = new TextField();
         urlField.setPrefHeight(30);
         urlField.setEditable(true);
-		urlField.setText("http://localhost");
+		urlField.setText("localhost");
         gridPane.add(urlField, 1,1,2,1);
     	
         // Add Command Label
@@ -157,47 +156,66 @@ public class CmdClientGUIV2 extends Application {
        new EventHandler<javafx.scene.input.MouseEvent>() { 
        
        @Override 
-       public void handle(javafx.scene.input.MouseEvent e) { 
+       public void handle(javafx.scene.input.MouseEvent e) {
     	   
-    	   String serverPath	= urlField.getText();
     	   Object src 			= e.getSource();
+    	   String serverPath	= urlField.getText();
     	   cmdText 				= cmdField.getText();
-    	   
-    	   HttpRequest httpReq 	= new HttpRequest();
-    	   String serverResponse= null;
-    	   
+    	   String port			= "9000";
     	   if (src == loopButton) {
     		   cmdType = "loop";
-    		   
+    		   loopOut.setText("");
     		   try {
     			   int iterNumber = Integer.parseInt(cmdText);
-    			   // sendget:
-    			   // form url
-    			   // send request
-    			   // ..request handled by server..
-    			   // loopOut.setText(result) - on a server side
-    			   serverResponse = httpReq.sendGet( cmdType, serverPath, cmdText);
+    			   System.out.println("Loop checks");
     			   
-    			   loopOut.setText(serverResponse);
+    			   if (serverPath.equals("")) {
+    				   loopOut.setText("Please, enter a server url");
+    			   } else if (port.equals("")) {
+    				   loopOut.setText("Please, check the port in the program");
+    			   } else {
+    				   TCPClientV2 obj_worker;
+    				   System.out.println("command type - " + cmdType + " having text - " + cmdText);
+    				   obj_worker = new TCPClientV2(
+										serverPath, Integer.parseInt(port), 
+										cmdType, cmdText, loopOut);
+    				   Thread cmdThread = new Thread(obj_worker);
+    				   cmdThread.start();
+    				   System.out.println("Loop new client");
+    				   new Thread(obj_worker).start();
+	           		}
     			   
     		   } catch (NumberFormatException ex) {
     			   loopOut.setText("Please, enter a valid number of Fibonacci numbers");
     		   } catch (Exception e1) {
-    			   System.out.println("Send request exception");
+    			   System.out.println("Loop: server connection failed - exception");
     			   e1.printStackTrace();
     		   } 
     	   } else {
     		   cmdType = "cmd";
-			   try {
-				   serverResponse = httpReq.sendGet( cmdType, serverPath, cmdText);
+    		   cmdOut.setText("");
+    		   try {
+    			   if (serverPath.equals("")) {
+    				   cmdOut.setText("Please, enter a server url");
+    			   } else if (port.equals("")) {
+    				   cmdOut.setText("Please, check the port in the program");
+    			   } else if (cmdText.equals("")) {
+    				   cmdOut.setText("Please, provide a command to execute");
+    			   } else {
+    				   TCPClientV2 obj_worker;
+    				   obj_worker = new TCPClientV2(
+										serverPath, Integer.parseInt(port), 
+										cmdType, cmdText, cmdOut);
+    				   Thread cmdThread = new Thread(obj_worker);
+    				   cmdThread.start();
+    			   }
 			   } catch (Exception e1) {
-				   System.out.println("Send request exception");
+				   System.out.println("Cmd: server connection failed - exception");
 				   e1.printStackTrace();
+				   
 			   }
-			   cmdOut.setText(serverResponse);
-		   }
-    	   
-       }    
+    	   }
+       }
     };
         
     public static void main(String[] args) {

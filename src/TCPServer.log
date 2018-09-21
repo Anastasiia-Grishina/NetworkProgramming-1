@@ -1,0 +1,8 @@
+сен 22, 2018 12:21:15 AM lab1part3.tcp.MultiThreadedTCPServer setLogger
+FINEST: Finnest message: Logger with SIMPLE FORMATTER
+сен 22, 2018 12:21:15 AM lab1part3.tcp.MultiThreadedTCPServer main
+INFO: Server started successfully
+сен 22, 2018 12:21:22 AM lab1part3.tcp.MultiThreadedTCPServer run
+INFO: Client thread started. Client thread number: 0. Thread name Thread-2
+сен 22, 2018 12:21:27 AM lab1part3.tcp.MultiThreadedTCPServer run
+INFO: Client thread started. Client thread number: 1. Thread name Thread-3

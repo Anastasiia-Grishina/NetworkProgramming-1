@@ -10,38 +10,33 @@ import java.net.URLEncoder;
 public class HttpRequest {
 	private final String USER_AGENT = "Mozilla/5.0";
 
-	public static void main(String[] args) throws Exception {
-
-		HttpRequest httpReq = new HttpRequest();
-
-		System.out.println("Testing 1 - Send Http GET request");
-//		http.sendGet();
-
-	}
-
-	// HTTP GET request
 	public String sendGet( String cmdType, String serverPath, String cmdText ) throws Exception {
+		//.......................................
+		// Construct HTTP GET request
+		//.......................................
 		
-		QueryString qs = new QueryString ("type", cmdType);
+		// Form an encoded query string from input parameters
+		// query format: type=<cmdType>&cmd=<cmdText>
+		QueryString qs 	= new QueryString ("type", cmdType);
 		qs.add( "cmd", cmdText );
-		String url = serverPath + ":2000?"+ qs;
-//		String url = "http://localhost:1234?type=loop&cmd=2";
-		System.out.println(url + "\n");
 		
+		// Form a url from server path, port and the encoded query
+		String url 		= serverPath + ":9000?"+ qs;
+		
+		// Create url with a prepared string & open connection
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 		
-		// optional default is GET
+		// Optional default connection is GET
 		con.setRequestMethod("GET");
 
-		//add request header
+		// Add request header
 		con.setRequestProperty("User-Agent", USER_AGENT);
-		System.out.println("URL CHECK LINE 38 " + url + "\n");
 		
+		// Get response code from the server		
 		int responseCode = con.getResponseCode();
-		System.out.println("\nSending 'GET' request to URL : " + url);
-		System.out.println("Response Code : " + responseCode);
 
+		// Get response stream from the server
 		BufferedReader in = new BufferedReader(
 		        new InputStreamReader(con.getInputStream()));
 		String inputLine;
@@ -51,8 +46,8 @@ public class HttpRequest {
 		}
 		in.close();
 
-		//print result
-		System.out.println(response.toString());
+		// Return response in a form of string
+		// It will be decoded then and passed to the text area on GUI
 		return response.toString();
 
 	}

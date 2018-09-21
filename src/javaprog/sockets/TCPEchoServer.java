@@ -2,7 +2,8 @@ package javaprog.sockets;
 
 //Requires a single command line arg - the port number
 import java.net.*;	// need this for InetAddress, Socket, ServerSocket 
-
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.io.*;	// need this for I/O stuff
 
 
@@ -68,18 +69,28 @@ public class TCPEchoServer {
 		OutputStream out = s.getOutputStream();
 		
 		// To write my name further, save it in the variable
-		String myName = " Anastasiia\n\n";
-
+		String myName = " Anastasiia ";
+		byte[] myNameByte = myName.getBytes(StandardCharsets.UTF_8);
+		
+		int totalLength = BUFSIZE + myNameByte.length; 
+		byte[] reply = new byte[totalLength];
+		
+		System.arraycopy(buff, 0, reply, 0, buff.length);
+		System.arraycopy(myNameByte, 0, reply, BUFSIZE, myNameByte.length);
+		
 		//read/write loop 
 		while ((bytesread = in.read(buff, 0, buff.length)) != -1) {
 			// Concatenate read string and my name
 			String input = new String(buff);
-			input = input.replace("\n", "");
-			input = input + myName;
+			
+			byte[] inputByte = input.getBytes();
+			
+			input = myName + input;
 			// Convert to bytes
 			byte[] output = input.getBytes();
 			// Write
 			out.write(output);
+			out.flush();
 			} 
 		
 		System.out.println("Client has left\n"); 
