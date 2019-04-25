@@ -11,7 +11,7 @@ The lab aims at introducing key network programming concepts and get hands-on ex
 - to implement a simple GUI
 - to test characteristics of one- and multi-threaded servers
 - to realize TCP server-client interaction 
-- to test Simple Messaging Interface using Wireshark
+- to test Simple Messaging Interface (SMI) using Wireshark
 - to establish an SSL connection, generate and manage keypairs
 - to use Amazon Web Services (AWS) for demonstration of the written code
 
@@ -19,4 +19,23 @@ The lab aims at introducing key network programming concepts and get hands-on ex
 - Java Programming Language
 - AWS Management Console
 
+## Results
+Available in the [report]()
+
+
 ## Folders
+- bin
+A folder that contained compiled Java files
+- src
+  - javaprog
+  
+  A directory with test code and minimal student input, contains echo servers and SMI with security part
+  - lab1part1 
+  
+  A directory dedicated to a simple GUI that runs a looping task
+  - lab1part3
+  
+  A directory with realization of client-server communication in 2 versions. Versions 1 and 2 in the [report]() are implemented with source code to be found in "tcp" and "tcpV2" subfolders 
+  
+## Acknowledgements
+PERCCOM Family
