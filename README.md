@@ -20,7 +20,7 @@ The lab aims at introducing key network programming concepts and get hands-on ex
 - AWS Management Console
 
 ## Results
-Available in the [report]()
+Available in the [report](https://github.com/Anastasiia-Grishina/Network_Programming-TCP_Servers/blob/master/Report%20Lab%202.pdf) with screenshots and explanations
 
 
 ## Folders
@@ -35,7 +35,7 @@ A folder that contained compiled Java files
   A directory dedicated to a simple GUI that runs a looping task
   - lab1part3
   
-  A directory with realization of client-server communication in 2 versions. Versions 1 and 2 in the [report]() are implemented with source code to be found in "tcp" and "tcpV2" subfolders 
+  A directory with realization of client-server communication in 2 versions. Versions 1 and 2 in the [report](https://github.com/Anastasiia-Grishina/Network_Programming-TCP_Servers/blob/master/Report%20Lab%202.pdf) are implemented with source code to be found in "tcp" and "tcpV2" subfolders 
   
 ## Acknowledgements
 PERCCOM Family
