@@ -20,7 +20,7 @@ The lab aims at introducing key network programming concepts and get hands-on ex
 - AWS Management Console
 
 ## Results
-Available in the [report](https://github.com/Anastasiia-Grishina/Network_Programming-TCP_Servers/blob/master/Report%20Lab%202.pdf) with screenshots and explanations
+Available in the [report](https://github.com/Anastasiia-Grishina/Network_Programming-TCP_Servers/blob/master/Report.pdf) with screenshots and explanations
 
 
 ## Folders
