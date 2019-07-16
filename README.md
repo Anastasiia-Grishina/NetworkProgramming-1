@@ -27,15 +27,11 @@ Available in the [report](https://github.com/Anastasiia-Grishina/Network_Program
 - bin
 A folder that contained compiled Java files
 - src
-  - javaprog
+  - javaprog - a directory with test code and minimal student input, contains echo servers and SMI with security part
   
-  A directory with test code and minimal student input, contains echo servers and SMI with security part
-  - lab1part1 
   
-  A directory dedicated to a simple GUI that runs a looping task
-  - lab1part3
-  
-  A directory with realization of client-server communication in 2 versions. Versions 1 and 2 in the [report](https://github.com/Anastasiia-Grishina/Network_Programming-TCP_Servers/blob/master/Report%20Lab%202.pdf) are implemented with source code to be found in "tcp" and "tcpV2" subfolders 
+  - lab1part1 - a directory dedicated to a simple GUI that runs a looping task
+  - lab1part3 - a directory with realization of client-server communication in 2 versions. Versions 1 and 2 in the [report](https://github.com/Anastasiia-Grishina/Network_Programming-TCP_Servers/blob/master/Report%20Lab%202.pdf) are implemented with source code to be found in "tcp" and "tcpV2" subfolders 
   
 ## Acknowledgements
 PERCCOM Family
